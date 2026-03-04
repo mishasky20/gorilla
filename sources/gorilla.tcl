@@ -52,12 +52,12 @@ namespace eval ::gorilla {
 # ----------------------------------------------------------------------
 #
 
-if {[catch {package require Tk 8.5} oops]} {
+if {[catch {package require Tk 8.5-} oops]} {
 	#
 	# Because of using Themed Widgets we need Tk 8.5
 	#
 
-	puts "Password Gorilla has been unable to load Tk 8.5, which is required."
+	puts "Password Gorilla has been unable to load Tk 8.5 or newer, which is required."
 	puts "Reason: '$oops'"
 	exit 1
 }
@@ -82,7 +82,7 @@ proc toplevel {path args} {
 
 option add *Dialog.msg.wrapLength 6i
 
-if {[catch {package require Tcl 8.5}]} {
+if {[catch {package require Tcl 8.5-}]} {
 	wm withdraw .
 	tk_messageBox -type ok -icon error -default ok \
 		-title "Need more recent Tcl/Tk" \
@@ -161,9 +161,9 @@ modules dir contents:
 			# else, use "Desktop"
 			
 			if { $::tcl_platform(os) eq "Linux" } {
-				set logfile [ file join ~ gorilla-debug-log ]
+				set logfile [ file join [file home] gorilla-debug-log ]
 			} else {
-				set logfile [ file join ~ Desktop gorilla-debug-log.txt ]
+				set logfile [ file join [file home] Desktop gorilla-debug-log.txt ]
 			}
 
 			set logfile [ file normalize $logfile ]
@@ -233,16 +233,16 @@ foreach file {isaac.tcl viewhelp.tcl} {
 # This is necessary for the embedded standalone version in MacOSX
 #
 
-if {[tk windowingsystem] == "aqua"}	{
-	# set auto_path /Library/Tcl/teapot/package/macosx-universal/lib/Itcl3.4
-	set auto_path ""
+if {[tk windowingsystem] != "aqua"}	{
+	# On non-macOS, use the bundled Itcl 3.4 if available
+	foreach testitdir [glob -nocomplain [file join $::gorilla::Dir itcl*]] {
+		if {[file isdirectory $testitdir]} {
+			lappend auto_path $testitdir
+		}
+	} ; unset -nocomplain testitdir
 }
-
-foreach testitdir [glob -nocomplain [file join $::gorilla::Dir itcl*]] {
-	if {[file isdirectory $testitdir]} {
-		lappend auto_path $testitdir
-	}
-} ; unset -nocomplain testitdir
+# On macOS (aqua), rely on the system-installed Itcl 4.x
+# The bundled itcl3.4 dylib is x86-only and cannot load on arm64
 
 #
 # Check the subdirectories for needed packages
@@ -6254,7 +6254,7 @@ proc gorilla::SavePreferencesToRCFile {} {
 		if {[info exists ::env(HOME)] && [file isdirectory $::env(HOME)]} {
 			set homeDir $::env(HOME)
 		} else {
-			set homeDir "~"
+			set homeDir [file home]
 		}
 
 		#
@@ -6428,7 +6428,7 @@ proc gorilla::LoadPreferencesFromRCFile {} {
 		if { [ info exists ::env(HOME) ] && [ file isdirectory $::env(HOME) ] } {
 			set homeDir $::env(HOME)
 		} else {
-			set homeDir "~"
+			set homeDir [file home]
 		}
 
 		#

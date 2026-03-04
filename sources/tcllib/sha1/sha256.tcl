@@ -24,7 +24,7 @@
 
 # @mdgen EXCLUDE: sha256c.tcl
 
-package require Tcl 8.2;                # tcl minimum version
+package require Tcl 8.2-;               # tcl minimum version
 
 namespace eval ::sha2 {
     variable version 1.0.2

@@ -1,7 +1,7 @@
 # Tcl package index file, version 1.0
 # modified for multiplatform use
 
-package require Tcl 8.5
+package require Tcl 8.5-
 
 set lib libitcl3.4
 if { $::tcl_platform(platform) eq "windows" } { set lib itcl34 }

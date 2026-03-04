@@ -29,7 +29,7 @@
 
 # this makes use of several 8.5 features, so make sure we are running at
 # least 8.5
-package require Tcl 8.5
+package require Tcl 8.5-
 
 package provide gorillaprogress 1.0.0
 

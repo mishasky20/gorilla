@@ -24,7 +24,7 @@
 
 # @mdgen EXCLUDE: md5c.tcl
 
-package require Tcl 8.2
+package require Tcl 8.2-
 namespace eval ::md5 {
 }
 

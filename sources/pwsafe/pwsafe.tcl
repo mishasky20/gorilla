@@ -1,4 +1,4 @@
-package require Tcl 8.4
+package require Tcl 8.4-
 package require Itcl
 package require sha256
 package require iblowfish
